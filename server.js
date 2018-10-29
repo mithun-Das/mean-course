@@ -1,8 +1,20 @@
-var express = require('express');
-var app = express();
-var port = process.env.PORT || 3000 ;
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000 ;
+
+const mongoose = require("mongoose");
 
 var bodyParser = require('body-parser');
+
+const Post = require('./backend/models/post.js');
+
+mongoose.connect("mongodb+srv://Mithun:esu!0rtc8@cluster0-xnbba.mongodb.net/test?retryWrites=true")
+.then(() => {
+    console.log("Server is now connected");
+})
+.catch((err) => {
+    console.log("Connection failed : ",err);
+});
 
 app.use((req,res,next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -26,7 +38,14 @@ app.get("/data", (req, res, next) => {
 
 
 app.post("/api/posts", (req,res,next) => {
-    const posts = req.body;
+
+    const posts = new Post({
+        title : req.body.title,
+        content : req.body.content
+    });
+
+    console.log(posts);
+
     res.status(201).json({
         message : "Data inserted successfully"
     });
