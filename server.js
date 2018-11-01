@@ -44,10 +44,15 @@ app.post("/api/posts", (req,res,next) => {
         content : req.body.content
     });
 
-    post.save();
-
-    res.status(201).json({
-        message : "Data inserted successfully"
+    post.save().then((response) => {
+        res.status(201).json({
+            message : "Data inserted successfully",
+            data : response
+        });    
+    }).catch((err) => {
+        res.status(400).json({
+            message : "Failed to inserted"
+        });    
     });
 
 });
@@ -62,15 +67,16 @@ app.get("/api/posts", (req, res) => {
         });
 
     }).catch((err) => {
-        res.stat
+        res.status(400).send("Something wrong happened");
     });
 
 });
 
 app.delete("/api/posts/:id", (req, res, next) => {
-    
-});
 
-// module.exports = {
-//     app : app
-// }
+    Post.deleteOne({_id : req.params.id}).then(result => {
+        res.status(200).json({ message : "Post Deleted !!!", status : "success" });
+    }).catch((err) => {
+        res.status(400).json({ message : "Something went wrong", status : "failure" });
+    });
+});

@@ -24,7 +24,8 @@ export class PostCreateComponent {
                 return ;
             }
 
-            const post : Post = {   title : form.value.title , 
+            const post : Post = {   id : "",
+                                    title : form.value.title , 
                                     content : form.value.content
                                 } ;
 
