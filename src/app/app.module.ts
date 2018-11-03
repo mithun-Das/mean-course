@@ -8,15 +8,17 @@ import { MatInputModule,
          MatCardModule,
          MatButtonModule,
          MatToolbarModule,
-         MatExpansionModule 
+         MatExpansionModule,
+         MatProgressSpinnerModule 
        } from '@angular/material';
       
-
 import { HeaderComponent } from './header/header.component';
 import { AppComponent } from './app.component';
 import { PostCreateComponent } from './posts/post-create/post-create.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
 import { TestComponent } from './../test/test.component';
+
+import { AppRoutingModule } from './app-routing.module';
 //import { PostService } from './posts/post.service';
 
 @NgModule({
@@ -28,7 +30,7 @@ import { TestComponent } from './../test/test.component';
     HeaderComponent
   ],
   imports: [
-
+    AppRoutingModule,
     BrowserModule,
     FormsModule,
     BrowserAnimationsModule,
@@ -38,6 +40,7 @@ import { TestComponent } from './../test/test.component';
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule,
+    MatProgressSpinnerModule,
     HttpClientModule
   ],
   providers: [],

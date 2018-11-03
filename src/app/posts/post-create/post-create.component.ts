@@ -1,9 +1,10 @@
-import { Component,EventEmitter,Output } from '@angular/core';
+import { Component,EventEmitter,Output, OnInit } from '@angular/core';
 import { Post } from './../post.model';
 import { NgForm } from '@angular/forms';
 
 import { PostListComponent } from './../post-list/post-list.component';
 import { PostService } from '../post.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 
 @Component({
@@ -12,13 +13,38 @@ import { PostService } from '../post.service';
     styleUrls : ["./post-create.component.css"]
 })
 
-export class PostCreateComponent {
+export class PostCreateComponent implements OnInit{
 
-  constructor(public postService : PostService) {}  
+    private mode = 'create';
+    private postId : string;    
+    public post: Post = {id : '', title : '', content : ''};
+
+  constructor(public postService : PostService, public route : ActivatedRoute) {  }  
 
 // @Output()   postCreated = new EventEmitter<Post>();
 
-        onAddPost(form : NgForm) {
+        ngOnInit() {
+
+            this.route.paramMap.subscribe( (paramMap : ParamMap) => {
+                if(paramMap.has('postId')){
+                    this.mode = 'edit';
+                    this.postId = paramMap.get('postId');
+                    this.postService.getPost(this.postId).subscribe((response) => {
+                       this.post = {
+                           id : response[0]._id,
+                           title : response[0].title,
+                           content : response[0].content
+                       }
+                   });
+                }else{
+                    this.mode = 'create';
+                    this.postId = null;
+                    
+                }
+            });
+        }
+
+        onSavePost(form : NgForm) {
 
             if(form.invalid){
                 return ;
@@ -31,8 +57,15 @@ export class PostCreateComponent {
 
             // this.postCreated.emit(post);
 
-            this.postService.addPost( form.value.title,form.value.content);
-        }
+            if(this.mode == "create"){
+                this.postService.addPost( form.value.title,form.value.content);
+                console.log("Create Mode");
+            }else {
+                this.postService.updatePost(this.postId,form.value.title,form.value.content);
+                console.log(this.postId + ' ' + form.value.title + ' ' + form.value.content)
+            }
 
-        
+            
+
+        }
 }
