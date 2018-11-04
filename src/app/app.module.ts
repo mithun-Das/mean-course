@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+// import { FormsModule } from '@angular/forms';  // For template driven form
+import { ReactiveFormsModule } from '@angular/forms'; // For reactive driven form
 import { HttpClientModule } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material';
 import { MatInputModule,
@@ -32,7 +33,8 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     AppRoutingModule,
     BrowserModule,
-    FormsModule,
+    // FormsModule,   // For template driven form
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
     MatInputModule,
