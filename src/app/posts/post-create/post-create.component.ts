@@ -5,7 +5,7 @@ import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { PostListComponent } from './../post-list/post-list.component';
 import { PostService } from '../post.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-
+import { mimeType } from "./mime-type.validator";
 
 @Component({
     selector : "./app-post-create",
@@ -32,7 +32,7 @@ export class PostCreateComponent implements OnInit{
             this.form = new FormGroup({
                 'title' : new FormControl(null, { validators : [Validators.required, Validators.minLength(3)] }),
                 'content' : new FormControl(null, { validators : [Validators.required, Validators.minLength(3)] }),
-                'image' : new FormControl(null, {validators : [Validators.required]})
+                'image' : new FormControl(null, { validators : [Validators.required]})
             });
 
             // End For template driven form //
