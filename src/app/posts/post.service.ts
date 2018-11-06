@@ -27,7 +27,8 @@ export class PostService {
                         return {
                             title : post.title,
                             content : post.content,
-                            id : post._id
+                            id : post._id,
+                            imagePath : post.imagePath
                         }
                     })                        
                  }))
@@ -48,10 +49,21 @@ export class PostService {
         return this.postUpdated.asObservable();
     }
 
-    addPost(title : string, content : string) {
-        var post = {id: "", title :  title, content : content};
-        this.http.post<{message : String, data : any}>('http://localhost:3000/api/posts',post).subscribe((response) => {
-            console.log(response.data);
+    addPost(title : string, content : string, image : File) {
+       // var post = {id: "", title :  title, content : content};
+        var postData = new FormData();
+        
+        postData.append("title", title);
+        postData.append("content", content);
+        postData.append("image", image, title);
+
+        this.http.post<{message : String, data : any}>('http://localhost:3000/api/posts',postData).subscribe((response) => {
+            var post = {
+                            id: response.data._id, 
+                            title :  title,
+                            content : content,
+                            imagePath : response.data.imagePath
+                        };
             post.id = response.data._id; 
             this.posts.push(post);
             this.postUpdated.next([...this.posts]);

@@ -3,10 +3,33 @@ const app = express();
 const port = process.env.PORT || 3000 ;
 
 const mongoose = require("mongoose");
+const bodyParser = require('body-parser');
+const multer = require("multer");
 
-var bodyParser = require('body-parser');
+const MIME_TYPE_MAP = {
+    'image/png' : 'png',
+    'image/jpeg' : 'jpg',
+    'image/jpg' : 'jpg'
+};
 
 const Post = require('./backend/models/post.js');
+const storage = multer.diskStorage({
+
+    destination : (req, file, cb) => {
+        var isValid = MIME_TYPE_MAP[file.mimetype];
+        var error = new Error("Invalid mime type");
+
+        if(isValid) { error = null ; }
+
+        cb(error,"backend/images");
+    },
+    filename : (req,file,cb) => {
+        const name = file.originalname.toLowerCase().split(' ').join('_');
+        const ext = MIME_TYPE_MAP[file.mimetype];
+        cb(null, name + '_' + Date.now() + '.' + ext);
+    }
+});
+
 
 mongoose.connect("mongodb://localhost:27017/node-angular")
 .then(() => {
@@ -37,11 +60,13 @@ app.get("/data", (req, res, next) => {
 });
 
 
-app.post("/api/posts", (req,res,next) => {
+app.post("/api/posts", multer({storage : storage}).single("image") ,(req,res,next) => {
 
+    const url = req.protocol + '://' + req.get("host");
     const post = new Post({
         title : req.body.title,
-        content : req.body.content
+        content : req.body.content,
+        imagePath : url + "/images/" + req.file.filename
     });
 
     post.save().then((response) => {

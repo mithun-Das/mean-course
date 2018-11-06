@@ -19,7 +19,7 @@ export class PostCreateComponent implements OnInit{
     imagePreview : any;
     private mode = 'create';
     private postId : string;    
-    public post: Post = {id : '', title : '', content : ''};
+    public post: Post = {id : '', title : '', content : '',imagePath : ''};
 
   constructor(public postService : PostService, public route : ActivatedRoute) {  }  
 
@@ -32,7 +32,7 @@ export class PostCreateComponent implements OnInit{
             this.form = new FormGroup({
                 'title' : new FormControl(null, { validators : [Validators.required, Validators.minLength(3)] }),
                 'content' : new FormControl(null, { validators : [Validators.required, Validators.minLength(3)] }),
-                'image' : new FormControl(null, { validators : [Validators.required]})
+                'image' : new FormControl(null, { validators : [Validators.required], asyncValidators : [mimeType]})
             });
 
             // End For template driven form //
@@ -45,7 +45,8 @@ export class PostCreateComponent implements OnInit{
                        this.post = {
                            id : response[0]._id,
                            title : response[0].title,
-                           content : response[0].content
+                           content : response[0].content,
+                           imagePath : response[0].imagePath
                        }
 
                        this.form.setValue({
@@ -71,6 +72,7 @@ export class PostCreateComponent implements OnInit{
             }
 
             reader.readAsDataURL(file);
+            console.log(file);
         }
 
         onSavePost() { //  onSavePost(form : NgForm)
@@ -81,13 +83,15 @@ export class PostCreateComponent implements OnInit{
 
             const post : Post = {   id : "",
                                     title : this.form.value.title , 
-                                    content : this.form.value.content
+                                    content : this.form.value.content,
+                                    imagePath : ''
+                                    
                                 } ;
 
             // this.postCreated.emit(post);
 
             if(this.mode == "create"){
-                this.postService.addPost( this.form.value.title,this.form.value.content);
+                this.postService.addPost( this.form.value.title,this.form.value.content,this.form.value.image);
             }else {
                 this.postService.updatePost(this.postId,this.form.value.title,this.form.value.content);
             }
