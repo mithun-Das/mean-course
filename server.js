@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000 ;
 
+const path = require("path");
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
 const multer = require("multer");
@@ -54,6 +55,7 @@ app.listen(port, () => {
 //require('./backend/app.js');
 
 app.use(bodyParser.json());
+app.use("/images", express.static(path.join("backend/images")));
 
 app.get("/data", (req, res, next) => {
     res.send("Congrats!!!");
@@ -113,12 +115,20 @@ app.post("/post", (req,res,next) => {
 });
 
 
-app.put("/api/posts/:id", (req,res,next) => {
-    
+app.put("/api/posts/:id", multer({storage : storage}).single("image"), (req,res,next) => {
+
+    let imagePath;
+
+    if(req.file){
+       const url = req.protocol + '://' + req.get("host"); ;
+       imagePath = url + "/images/" + req.file.filename;  
+    }
+
     const post = new Post({
         _id : req.params.id,
         title : req.body.title,
         content : req.body.content,
+        imagePath : imagePath
     })
 
     Post.updateOne({_id : req.params.id}, post).then((response) => {
