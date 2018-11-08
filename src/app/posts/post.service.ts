@@ -17,11 +17,13 @@ export class PostService {
     
     }
 
-    getPosts() {
+    getPosts(pageSize : number,currentPage : number) {
         //return this.posts;
         // return [...this.posts];
 
-        this.http.get<{message : String, posts : any}>('http://localhost:3000/api/posts')
+        var queryParams = "?pageSize=" + pageSize + "&currentPage=" + currentPage ;
+
+        this.http.get<{message : String, posts : any}>('http://localhost:3000/api/posts' + queryParams)
                  .pipe(map((postData) => {
                     return postData.posts.map(post => {
                         return {

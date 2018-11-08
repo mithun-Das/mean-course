@@ -86,7 +86,16 @@ app.post("/api/posts", multer({storage : storage}).single("image") ,(req,res,nex
 
 app.get("/api/posts", (req, res) => {
 
-    Post.find().then((documents) => {
+    var pageSize = +req.query.pageSize ;
+    var currentPage = +req.query.currentPage ;
+    var postQuery = Post.find();
+    
+    if(pageSize && currentPage) {
+        postQuery.skip(pageSize * (currentPage - 1))
+                 .limit(pageSize);
+    }
+
+    postQuery.then((documents) => {
         res.status(200).json({
 
             message : "Server sent you the response",
@@ -96,7 +105,6 @@ app.get("/api/posts", (req, res) => {
     }).catch((err) => {
         res.status(400).send("Something wrong happened");
     });
-
 });
 
 app.post("/post", (req,res,next) => {
