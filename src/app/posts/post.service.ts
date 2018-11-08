@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class PostService {
 
     private posts : Post[] = [];
-    private postUpdated = new Subject<Post[]>();
+    private postUpdated = new Subject<{posts : Post[], postCount : number}>();
 
     constructor(private http : HttpClient,private router : Router) {
     
@@ -23,20 +23,20 @@ export class PostService {
 
         var queryParams = "?pageSize=" + pageSize + "&currentPage=" + currentPage ;
 
-        this.http.get<{message : String, posts : any}>('http://localhost:3000/api/posts' + queryParams)
+        this.http.get<{message : String, posts : any,maxPosts : number}>('http://localhost:3000/api/posts' + queryParams)
                  .pipe(map((postData) => {
-                    return postData.posts.map(post => {
+                    return { posts :  postData.posts.map(post => {
                         return {
                             title : post.title,
                             content : post.content,
                             id : post._id,
                             imagePath : post.imagePath
                         }
-                    })                        
+                    }), maxPosts : postData.maxPosts}                    
                  }))
                  .subscribe(transformedPosts => {
-                        this.posts = transformedPosts ;
-                        this.postUpdated.next([...this.posts]);
+                        this.posts = transformedPosts.posts ;
+                        this.postUpdated.next({posts : [...this.posts],postCount : transformedPosts.maxPosts});
                  });
     }
 
@@ -68,7 +68,7 @@ export class PostService {
                         };
             post.id = response.data._id; 
             this.posts.push(post);
-            this.postUpdated.next([...this.posts]);
+            this.postUpdated.next({posts : [...this.posts], postCount : this.posts.length});
             this.router.navigateByUrl("/");
         })
     }
@@ -100,10 +100,10 @@ export class PostService {
 
     deletePost(postId : string, index : any) {
        
-        this.http.delete("http://localhost:3000/api/posts/" + postId)
+       return this.http.delete("http://localhost:3000/api/posts/" + postId)
                  .subscribe((response) => {
                     this.posts.splice(index,1);
-                    this.postUpdated.next([...this.posts]);
+                    this.postUpdated.next({posts : [...this.posts], postCount : this.posts.length});
                     return new Promise((resolve,reject) => {
                         resolve(response);
                         //reject("deletion failed");

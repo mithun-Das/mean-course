@@ -89,6 +89,7 @@ app.get("/api/posts", (req, res) => {
     var pageSize = +req.query.pageSize ;
     var currentPage = +req.query.currentPage ;
     var postQuery = Post.find();
+    var fetchedPosts;
     
     if(pageSize && currentPage) {
         postQuery.skip(pageSize * (currentPage - 1))
@@ -96,12 +97,17 @@ app.get("/api/posts", (req, res) => {
     }
 
     postQuery.then((documents) => {
+
+       fetchedPosts = documents ;
+       return Post.count(); 
+
+    }).then((count) => {
         res.status(200).json({
-
+            
             message : "Server sent you the response",
-            posts : documents
-        });
-
+            posts : fetchedPosts,
+            maxPosts : count
+        }); 
     }).catch((err) => {
         res.status(400).send("Something wrong happened");
     });
