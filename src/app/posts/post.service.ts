@@ -30,7 +30,8 @@ export class PostService {
                             title : post.title,
                             content : post.content,
                             id : post._id,
-                            imagePath : post.imagePath
+                            imagePath : post.imagePath,
+                            creator : post.creator
                         }
                     }), maxPosts : postData.maxPosts}                    
                  }))
@@ -43,7 +44,6 @@ export class PostService {
     getPost(id : string) {
 
         var post = { _id : id} ;
-        console.log(post);
         return this.http.post("http://localhost:3000/post", post);
     }
 
@@ -53,7 +53,7 @@ export class PostService {
 
     addPost(title : string, content : string, image : File) {
        // var post = {id: "", title :  title, content : content};
-        var postData = new FormData();console.log(postData);
+        var postData = new FormData();
         
         postData.append("title", title);
         postData.append("content", content);
@@ -106,7 +106,6 @@ export class PostService {
                     this.postUpdated.next({posts : [...this.posts], postCount : this.posts.length});
                     return new Promise((resolve,reject) => {
                         resolve(response);
-                        //reject("deletion failed");
                     });
                  });
     }
