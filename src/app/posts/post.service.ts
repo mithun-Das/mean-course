@@ -53,7 +53,7 @@ export class PostService {
 
     addPost(title : string, content : string, image : File) {
        // var post = {id: "", title :  title, content : content};
-        var postData = new FormData();
+        var postData = new FormData();console.log(postData);
         
         postData.append("title", title);
         postData.append("content", content);
