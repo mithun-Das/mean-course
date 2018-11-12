@@ -67,7 +67,7 @@ app.post("/api/posts", checkAuth, multer({storage : storage}).single("image") ,(
         title : req.body.title,
         content : req.body.content,
         imagePath : url + "/images/" + req.file.filename,
-        creator : req.userData.userId
+        creator : mongoose.Types.ObjectId(req.userData.userId)
     });
 
     post.save().then((response) => {
@@ -201,14 +201,22 @@ app.put("/api/posts/:id", checkAuth, multer({storage : storage}).single("image")
         _id : req.params.id,
         title : req.body.title,
         content : req.body.content,
-        imagePath : imagePath
+        imagePath : imagePath,
+        creator : req.body.creator
     })
 
-    Post.updateOne({_id : req.params.id}, post).then((response) => {
-        res.status(200).json({
-            message : "Updated succesfully",
-            data : post
-        });
+    Post.updateOne({_id : req.params.id, creator : req.userData.userId}, post).then((response) => {
+
+        if(response.nModified > 0) {
+            res.status(200).json({
+                message : "Updated succesfully",
+                data : post
+            });    
+        }else {
+            res.status(401).json({
+                message : "Not Authorized"});    
+        }
+
     }).catch((err) => {
         res.status(400).json({
             message : "Something went wrong",
@@ -220,8 +228,12 @@ app.put("/api/posts/:id", checkAuth, multer({storage : storage}).single("image")
 
 app.delete("/api/posts/:id", checkAuth, (req, res, next) => {
 
-    Post.deleteOne({_id : req.params.id}).then(result => {
-        res.status(200).json({ message : "Post Deleted !!!", status : "success" });
+    Post.deleteOne({_id : req.params.id, creator : req.userData.userId}).then(result => {
+       // if(result.n > 0){
+            res.status(200).json({ message : "Post Deleted !!!", status : "success" });
+       // }else{
+       //     res.status(401).json({ message : "Not Authorized !!!", status : "Fail" });
+       // }
     }).catch((err) => {
         res.status(400).json({ message : "Something went wrong", status : "failure" });
     });

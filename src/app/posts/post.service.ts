@@ -43,7 +43,7 @@ export class PostService {
 
     getPost(id : string) {
 
-        var post = { _id : id} ;
+        var post = {id : id} ;
         return this.http.post("http://localhost:3000/post", post);
     }
 
@@ -104,9 +104,9 @@ export class PostService {
                  .subscribe((response) => {
                     this.posts.splice(index,1);
                     this.postUpdated.next({posts : [...this.posts], postCount : this.posts.length});
-                    return new Promise((resolve,reject) => {
-                        resolve(response);
-                    });
+                    // return new Promise((resolve,reject) => {
+                    //     resolve(response);
+                    // });
                  });
     }
 
