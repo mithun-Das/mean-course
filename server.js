@@ -149,14 +149,16 @@ app.post("/login", (req,res,next) => {
     });
 });
 
-app.post("/signup", (req,res,next) => {
+app.post("/signup", (req,res,next) => { 
 
-    bcrypt.hash(req.body.password , 10).then((hashedPassword) => {
+    bcrypt.hash(req.body.password , 10).then((hashedPassword) => {console.log(hashedPassword);
         var user = new User({
             email : req.body.email,
             password : hashedPassword
+        }).catch((err) => {
+            console.log(err);
         });
-        
+        console.log(req.body.password);
         user.save().then((response) => {
             res.status(201).json({
                 message : "User created!!!",
