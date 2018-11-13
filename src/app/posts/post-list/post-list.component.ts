@@ -1,6 +1,7 @@
 import { Component,Input,OnInit,OnDestroy } from '@angular/core';
 import { Post } from './../post.model';
 import { PostService } from './../post.service';
+import { AuthService } from './../../auth/auth.service';
 import { Subscription } from 'rxjs';
 import { PageEvent } from '@angular/material';
 //import { AppRoutingModule } from './../../app-routing.module';
@@ -21,18 +22,20 @@ export class PostListComponent implements OnInit, OnDestroy{
      pageSizeOptions = [1,2,5,10];
      isLoading = true;
      posts : Post[] = [];
+     private userId : string;
      private postSub : Subscription;
 
 
     //postService : PostService;
 
-    constructor(public postService : PostService) {
+    constructor(public postService : PostService, public authService : AuthService) {
         //this.postService = postService;
     }
 
     ngOnInit() {
         this.isLoading = true;
         this.postService.getPosts(this.postsPerPage, this.currentPage);
+        this.userId = this.authService.getUserId();
         this.postSub = this.postService.getPostUpdateListener()
         .subscribe((data) => {
             this.posts = data.posts;

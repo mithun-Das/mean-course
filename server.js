@@ -132,14 +132,15 @@ app.post("/login", (req,res,next) => {
                 message : "Authentication Failed !!!"
             });
         }else {
-            const token = jwt.sign({email : fetchedUser.email , id : fetchedUser._id}, "secret_this_should_be_longer",
+            const token = jwt.sign({email : fetchedUser.email , userId : fetchedUser._id}, "secret_this_should_be_longer",
              {
                 expiresIn : "1h"
             });
 
             res.status(200).json({
                 token : token,
-                expiresIn : 3600
+                expiresIn : 3600,
+                userId : fetchedUser._id
             });
         }
     }).catch((err) => {
@@ -151,14 +152,13 @@ app.post("/login", (req,res,next) => {
 
 app.post("/signup", (req,res,next) => { 
 
-    bcrypt.hash(req.body.password , 10).then((hashedPassword) => {console.log(hashedPassword);
+    bcrypt.hash(req.body.password , 10).then((hashedPassword) => {
+
         var user = new User({
             email : req.body.email,
             password : hashedPassword
-        }).catch((err) => {
-            console.log(err);
-        });
-        console.log(req.body.password);
+        })
+
         user.save().then((response) => {
             res.status(201).json({
                 message : "User created!!!",
@@ -170,8 +170,9 @@ app.post("/signup", (req,res,next) => {
                 error : err
             });
         })
+    }).catch((err) => {
+        console.log(err);
     });
-
 })
 
 app.post("/post", (req,res,next) => {
@@ -230,12 +231,12 @@ app.put("/api/posts/:id", checkAuth, multer({storage : storage}).single("image")
 
 app.delete("/api/posts/:id", checkAuth, (req, res, next) => {
 
-    Post.deleteOne({_id : req.params.id, creator : req.userData.userId}).then(result => {
-       // if(result.n > 0){
+    Post.deleteOne({_id : mongoose.Types.ObjectId(req.params.id), creator : mongoose.Types.ObjectId(req.userData.userId)}).then((result) => {
+       if(result.n > 0){
             res.status(200).json({ message : "Post Deleted !!!", status : "success" });
-       // }else{
-       //     res.status(401).json({ message : "Not Authorized !!!", status : "Fail" });
-       // }
+       }else{
+           res.status(401).json({ message : "Not Authorized !!!", status : "Fail" });
+       }
     }).catch((err) => {
         res.status(400).json({ message : "Something went wrong", status : "failure" });
     });

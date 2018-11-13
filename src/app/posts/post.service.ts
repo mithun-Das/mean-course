@@ -64,7 +64,8 @@ export class PostService {
                             id: response.data._id, 
                             title :  title,
                             content : content,
-                            imagePath : response.data.imagePath
+                            imagePath : response.data.imagePath,
+                            creator : response.data.creator
                         };
             post.id = response.data._id; 
             this.posts.push(post);
@@ -89,7 +90,8 @@ export class PostService {
                     id : id, 
                     title : title, 
                     content : content,
-                    imagePath : image
+                    imagePath : image,
+                    creator : null
             };
         }
 
@@ -100,14 +102,13 @@ export class PostService {
 
     deletePost(postId : string, index : any) {
        
-       return this.http.delete("http://localhost:3000/api/posts/" + postId)
+        this.http.delete<{message : string, status : string}>("http://localhost:3000/api/posts/" + postId)
                  .subscribe((response) => {
-                    this.posts.splice(index,1);
-                    this.postUpdated.next({posts : [...this.posts], postCount : this.posts.length});
-                    // return new Promise((resolve,reject) => {
-                    //     resolve(response);
-                    // });
+
+                    if(response.status == "success") {
+                        this.posts.splice(index,1);
+                        this.postUpdated.next({posts : [...this.posts], postCount : this.posts.length});    
+                    }
                  });
     }
-
 }

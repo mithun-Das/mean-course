@@ -19,7 +19,7 @@ export class PostCreateComponent implements OnInit{
     imagePreview : any;
     private mode = 'create';
     private postId : string;    
-    public post: Post = {id : '', title : '', content : '',imagePath : ''};
+    public post: Post = {id : '', title : '', content : '',imagePath : '',creator : ''};
 
   constructor(public postService : PostService, public route : ActivatedRoute) {  }  
 
@@ -41,12 +41,13 @@ export class PostCreateComponent implements OnInit{
                 if(paramMap.has('postId')){
                     this.mode = 'edit';
                     this.postId = paramMap.get('postId');
-                    this.postService.getPost(this.postId).subscribe((response) => {debugger;
+                    this.postService.getPost(this.postId).subscribe((response) => {
                        this.post = {
                            id : response[0]._id,
                            title : response[0].title,
                            content : response[0].content,
-                           imagePath : response[0].imagePath
+                           imagePath : response[0].imagePath,
+                           creator : response[0].creator
                        }
 
                        this.form.setValue({
@@ -85,7 +86,8 @@ export class PostCreateComponent implements OnInit{
             const post : Post = {   id : "",
                                     title : this.form.value.title , 
                                     content : this.form.value.content,
-                                    imagePath : ''
+                                    imagePath : '',
+                                    creator : null
                                     
                                 } ;
 
