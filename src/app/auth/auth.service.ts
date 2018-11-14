@@ -59,9 +59,13 @@ export class AuthService {
             email : email,
             password : password
         }
-
-        this.http.post("http://localhost:3000/signup",authData).subscribe((response) => {
+        console.log(authData);
+        
+        this.http.post<{message : string, result : any}>("http://localhost:3000/signup",authData).subscribe((response) => {
             this.router.navigateByUrl("/"); 
+        }, (error) => {
+            console.log(error);            
+            //this.router.navigateByUrl("/login");
         });
     }
 
