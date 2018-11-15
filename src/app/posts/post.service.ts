@@ -4,12 +4,19 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-
+import { environment } from './../../environments/environment';
 
 @Injectable({providedIn : 'root'})
 
 export class PostService {
 
+    private httpGetSinglePostUrl = environment.domainUrl + '/post';
+    private httpGetAllPostUrl = environment.domainUrl  + '/posts';
+    private httpCreatePostUrl = environment.domainUrl + '/post/create';
+    private httpUpdatePostUrl = environment.domainUrl + '/post/update/';
+    private httpDeletePostUrl = environment.domainUrl + '/post/delete/';
+    
+    
     private posts : Post[] = [];
     private postUpdated = new Subject<{posts : Post[], postCount : number}>();
 
@@ -23,7 +30,7 @@ export class PostService {
 
         var queryParams = "?pageSize=" + pageSize + "&currentPage=" + currentPage ;
 
-        this.http.get<{message : String, posts : any,maxPosts : number}>('http://localhost:3000/api/posts' + queryParams)
+        this.http.get<{message : String, posts : any,maxPosts : number}>(this.httpGetAllPostUrl +  queryParams)
                  .pipe(map((postData) => {
                     return { posts :  postData.posts.map(post => {
                         return {
@@ -44,7 +51,7 @@ export class PostService {
     getPost(id : string) {
 
         var post = {id : id} ;
-        return this.http.post("http://localhost:3000/post", post);
+        return this.http.post(this.httpGetSinglePostUrl, post);
     }
 
     getPostUpdateListener() {
@@ -59,7 +66,7 @@ export class PostService {
         postData.append("content", content);
         postData.append("image", image, title);
 
-        this.http.post<{message : String, data : any}>('http://localhost:3000/api/posts',postData).subscribe((response) => {
+        this.http.post<{message : String, data : any}>(this.httpCreatePostUrl, postData).subscribe((response) => {
             var post = {
                             id: response.data._id, 
                             title :  title,
@@ -95,14 +102,14 @@ export class PostService {
             };
         }
 
-        this.http.put("http://localhost:3000/api/posts/" + id, postData).subscribe((response) => {
+        this.http.put(this.httpUpdatePostUrl + id, postData).subscribe((response) => {
             this.router.navigateByUrl("/");
         });
     }
 
     deletePost(postId : string, index : any) {
        
-        this.http.delete<{message : string, status : string}>("http://localhost:3000/api/posts/" + postId)
+        this.http.delete<{message : string, status : string}>(this.httpDeletePostUrl + postId)
                  .subscribe((response) => {
 
                     if(response.status == "success") {

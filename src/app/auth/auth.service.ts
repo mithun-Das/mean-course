@@ -4,11 +4,15 @@ import { HttpClient } from "@angular/common/http";
 import { AuthData } from "./auth-data.model";
 import { Subject } from "rxjs";
 import { Router } from "@angular/router";
+import { environment } from "./../../environments/environment";
 
 @Injectable({ providedIn : "root" })
 
 export class AuthService {
 
+    private httpSignupUrl = environment.domainUrl + "/signup";
+    private httpLoginUrl = environment.domainUrl + "/login";
+    
     private token : string;
     private isUserAuthenticated = false;
     private tokenTimer : any;
@@ -39,7 +43,7 @@ export class AuthService {
         var authInfo = this.getAuthData();
 
         if(!authInfo) {
-            this.router.navigateByUrl("/login"); 
+            this.router.navigateByUrl("/auth/login"); 
         }
 
         var now = new Date();
@@ -61,7 +65,7 @@ export class AuthService {
         }
         console.log(authData);
         
-        this.http.post<{message : string, result : any}>("http://localhost:3000/signup",authData).subscribe((response) => {
+        this.http.post<{message : string, result : any}>(this.httpSignupUrl,authData).subscribe((response) => {
             this.router.navigateByUrl("/"); 
         }, (error) => {
             console.log(error);            
@@ -75,7 +79,7 @@ export class AuthService {
             password : password
         }
 
-        this.http.post<{token : string, expiresIn : number, userId : string}>("http://localhost:3000/login",authData).subscribe((response) => {
+        this.http.post<{token : string, expiresIn : number, userId : string}>(this.httpLoginUrl,authData).subscribe((response) => {
             const expiresInDuration = response.expiresIn;
             this.token = response.token;
             this.userId = response.userId;
@@ -96,7 +100,7 @@ export class AuthService {
         this.authStatusListener.next(false);
         clearTimeout(this.tokenTimer);
         this.clearAuthData();
-        this.router.navigateByUrl("/login");
+        this.router.navigateByUrl("/auth/login");
     }
 
     private setAuthTimer(duration : number) {

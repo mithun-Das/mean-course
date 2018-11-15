@@ -37,12 +37,16 @@ app.post("/login", userController.userLogin);
 
 app.post("/signup", userController.userSignup);
 
-app.get("/api/posts", checkAuth, postController.getPosts);
+app.get("/posts", checkAuth, postController.getPosts);
 
-app.post("/api/posts", checkAuth, extractFile, postController.insertPost);
+app.post("/post/create", checkAuth, extractFile, postController.insertPost);
 
 app.post("/post", postController.getPostInfo);
 
-app.put("/api/posts/:id", checkAuth, extractFile, postController.updatePost);
+app.put("/post/update/:id", checkAuth, extractFile, postController.updatePost);
 
-app.delete("/api/posts/:id", checkAuth, postController.deletePost);
+app.delete("/post/delete/:id", checkAuth, postController.deletePost);
+
+app.get("/test", (req,res,next) => {
+    res.status(200).send("Congratz");
+});

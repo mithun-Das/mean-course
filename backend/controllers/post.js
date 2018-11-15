@@ -88,7 +88,7 @@ exports.updatePost = (req,res,next) => {
 
     Post.updateOne({_id : req.params.id, creator : req.userData.userId}, post).then((response) => {
 
-        if(response.nModified > 0) {
+        if(response.n > 0) {
             res.status(200).json({
                 message : "Updated succesfully",
                 data : post
