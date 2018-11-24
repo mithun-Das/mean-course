@@ -7,8 +7,6 @@
 
 #environment
 environment.ts
-test.txt
-test1.txt
 
 # dependencies
 /node_modules
