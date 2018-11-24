@@ -5,8 +5,8 @@
 /tmp
 /out-tsc
 
-#commit
-.environment.ts
+#environment
+environment.ts
 
 # dependencies
 /node_modules
