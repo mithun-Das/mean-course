@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  domainUrl : "http://localhost:3000"
+  //domainUrl : "http://localhost:3000"
+  domainUrl : "https://www.facebook.com/"
 };
 
 /*
