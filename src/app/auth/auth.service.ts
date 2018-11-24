@@ -113,7 +113,6 @@ export class AuthService {
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
         localStorage.setItem('expiration', expirationDate.toISOString());
-
     }
 
     private clearAuthData () {
