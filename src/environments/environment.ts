@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  domainUrl : "https://devcenter.heroku.com/articles/heroku-cli"
+  domainUrl : ""
 };
 
 /*
