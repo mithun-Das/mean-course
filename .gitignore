@@ -5,6 +5,9 @@
 /tmp
 /out-tsc
 
+#environment
+environment.ts
+
 # dependencies
 /node_modules
 
