@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  //domainUrl : "http://localhost:3000"
-  domainUrl : "https://www.facebook.com/"
+  domainUrl : "https://quiet-refuge-84852.herokuapp.com"
 };
 
 /*
