@@ -31,7 +31,7 @@ app.use((req,res,next) => {
 });
 
 app.use(bodyParser.json());
-app.use(express.static(__dirname+'/dist'));
+app.use(express.static(__dirname+'/dist/mean-course'));
 app.use("/images", express.static(path.join("backend/images")));
 
 app.post("/login", userController.userLogin);
