@@ -31,7 +31,7 @@ app.use((req,res,next) => {
 });
 
 app.use(bodyParser.json());
-app.use(express.static(__dirname+'/dist/quiet-refuge-84852'));
+//app.use(express.static(__dirname+'/dist/quiet-refuge-84852'));
 app.use("/images", express.static(path.join("backend/images")));
 
 app.post("/login", userController.userLogin);
@@ -48,7 +48,7 @@ app.put("/post/update/:id", checkAuth, extractFile, postController.updatePost);
 
 app.delete("/post/delete/:id", checkAuth, postController.deletePost);
 
-app.get("/*",(req,res) => {
+app.get("/*", (req,res) => {
 
     res.sendFile(path.join(__dirname+'/dist/quiet-refuge-84852/index.html'));
 });
