@@ -31,7 +31,7 @@ app.use((req,res,next) => {
 });
 
 app.use(bodyParser.json());
-//app.use(express.static(__dirname+'/dist/quiet-refuge-84852'));
+app.use(express.static(__dirname));
 app.use("/images", express.static(path.join("backend/images")));
 
 app.post("/login", userController.userLogin);
@@ -50,7 +50,7 @@ app.delete("/post/delete/:id", checkAuth, postController.deletePost);
 
 app.get("/*", (req,res) => {
 
-    res.sendFile(path.join(__dirname+'/src/app/auth/login/login.component.html'));
+    res.sendFile(path.join(__dirname+'/src/index.html'));
 });
 
 app.get("/test", (req,res,next) => {
