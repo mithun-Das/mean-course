@@ -48,7 +48,7 @@ app.put("/post/update/:id", checkAuth, extractFile, postController.updatePost);
 
 app.delete("/post/delete/:id", checkAuth, postController.deletePost);
 
-app.get("/login",(req,res) => {
+app.get("/*",(req,res) => {
 
     res.sendFile(path.join(__dirname+'/dist/login.html'));
 });
