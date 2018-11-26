@@ -31,7 +31,7 @@ app.use((req,res,next) => {
 });
 
 app.use(bodyParser.json());
-app.use(express.static(__dirname+'/dist/mean-course'));
+app.use(express.static(__dirname+'/dist'));
 app.use("/images", express.static(path.join("backend/images")));
 
 app.post("/login", userController.userLogin);
@@ -50,7 +50,7 @@ app.delete("/post/delete/:id", checkAuth, postController.deletePost);
 
 app.get("/login",(req,res) => {
 
-    res.sendFile(path.join(__dirname+'/dist/mean-course/login.html'));
+    res.sendFile(path.join(__dirname+'/dist/login.html'));
 });
 
 app.get("/test", (req,res,next) => {
