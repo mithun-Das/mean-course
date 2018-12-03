@@ -30,7 +30,7 @@ app.listen( process.env.PORT, () => {
 // });
 
 app.use(bodyParser.json());
-app.use(express.static(__dirname +  '/dist/angular-mean-course'));
+app.use(express.static(__dirname +  '/dist/mean-course'));
 //app.use("/images", express.static(path.join("backend/images")));
 
 // app.post("/login", userController.userLogin);
@@ -49,7 +49,7 @@ app.use(express.static(__dirname +  '/dist/angular-mean-course'));
 
 app.get("/", (req,res) => {
 
-    res.sendFile(path.join(__dirname,'/dist/angular-mean-course/index.html'));
+    res.sendFile(path.join(__dirname,'/dist/mean-course/index.html'));
 });
 
 app.get("/test", (req,res,next) => {
