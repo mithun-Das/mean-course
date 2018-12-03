@@ -10,7 +10,7 @@ const userController = require('./backend/controllers/user.js');
 const postController = require('./backend/controllers/post.js');
 const extractFile = require('./backend/middleware/file');
 
-mongoose.connect("mongodb://localhost:27017/node-angular")
+mongoose.connect(process.env.MONGODB_URI)
 .then(() => {
     console.log("Server is now connected");
 })
