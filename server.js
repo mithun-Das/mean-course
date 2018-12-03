@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000 ;
 
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
@@ -19,8 +18,8 @@ mongoose.connect("mongodb://localhost:27017/node-angular")
     console.log("Connection failed : ",err);
 });
 
-app.listen(port, () => {
-    console.log("Connect to port : ", port);
+app.listen( process.env.PORT, () => {
+    console.log("Connect to port : ",  process.env.PORT);
 });
 
 app.use((req,res,next) => {
@@ -48,7 +47,7 @@ app.put("/post/update/:id", checkAuth, extractFile, postController.updatePost);
 
 app.delete("/post/delete/:id", checkAuth, postController.deletePost);
 
-app.get("/*", (req,res) => {
+app.get("/", (req,res) => {
 
     res.sendFile(path.join(__dirname,'/dist/angular-mean-course/index.html'));
 });
