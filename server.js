@@ -14,38 +14,38 @@ app.listen( process.env.PORT, () => {
     console.log("Connect to port : ",  process.env.PORT);
 });
 
-// mongoose.connect(process.env.MONGODB_URI)
-// .then(() => {
-//     console.log("Server is now connected");
-// })
-// .catch((err) => {
-//     console.log("Connection failed : ",err);
-// });
+mongoose.connect(process.env.MONGODB_URI)
+.then(() => {
+    console.log("Server is now connected");
+})
+.catch((err) => {
+    console.log("Connection failed : ",err);
+});
 
-// app.use((req,res,next) => {
-//     res.setHeader("Access-Control-Allow-Origin", "*");
-//     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-//     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
-//     next();
-// });
+app.use((req,res,next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
+    next();
+});
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname +  '/dist/mean-course'));
-//app.use("/images", express.static(path.join("backend/images")));
+app.use("/images", express.static(path.join("backend/images")));
 
-// app.post("/login", userController.userLogin);
+app.post("/login", userController.userLogin);
 
-// app.post("/signup", userController.userSignup);
+app.post("/signup", userController.userSignup);
 
-// app.get("/posts", checkAuth, postController.getPosts);
+app.get("/posts", checkAuth, postController.getPosts);
 
-// app.post("/post/create", checkAuth, extractFile, postController.insertPost);
+app.post("/post/create", checkAuth, extractFile, postController.insertPost);
 
-// app.post("/post", postController.getPostInfo);
+app.post("/post", postController.getPostInfo);
 
-// app.put("/post/update/:id", checkAuth, extractFile, postController.updatePost);
+app.put("/post/update/:id", checkAuth, extractFile, postController.updatePost);
 
-// app.delete("/post/delete/:id", checkAuth, postController.deletePost);
+app.delete("/post/delete/:id", checkAuth, postController.deletePost);
 
 app.get("/", (req,res) => {
 
