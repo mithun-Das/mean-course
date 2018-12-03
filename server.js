@@ -10,16 +10,16 @@ const userController = require('./backend/controllers/user.js');
 const postController = require('./backend/controllers/post.js');
 const extractFile = require('./backend/middleware/file');
 
+app.listen( process.env.PORT, () => {
+    console.log("Connect to port : ",  process.env.PORT);
+});
+
 mongoose.connect(process.env.MONGODB_URI)
 .then(() => {
     console.log("Server is now connected");
 })
 .catch((err) => {
     console.log("Connection failed : ",err);
-});
-
-app.listen( process.env.PORT, () => {
-    console.log("Connect to port : ",  process.env.PORT);
 });
 
 app.use((req,res,next) => {
