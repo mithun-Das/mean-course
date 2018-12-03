@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { environment } from './../../environments/environment';
+import { environment } from './../../environments/environment.prod';
 
 @Injectable({providedIn : 'root'})
 

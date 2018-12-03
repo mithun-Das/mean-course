@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { AuthData } from "./auth-data.model";
 import { Subject } from "rxjs";
 import { Router } from "@angular/router";
-import { environment } from "./../../environments/environment";
+import { environment } from "./../../environments/environment.prod";
 
 @Injectable({ providedIn : "root" })
 
