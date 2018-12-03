@@ -49,7 +49,7 @@ app.delete("/post/delete/:id", checkAuth, postController.deletePost);
 
 app.get("/", (req,res) => {
 
-    res.sendFile(path.join(__dirname,'/dist/mean-course/index.html'));
+    res.sendFile(path.join(__dirname,'/src/app/auth/signup/signup.component.html'));
 });
 
 app.get("/test", (req,res,next) => {
