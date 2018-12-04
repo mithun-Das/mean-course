@@ -34,7 +34,7 @@ app.use((req,res,next) => {
 });
 
 app.use(bodyParser.json());
-app.get((req,res,next) => {
+app.use((req,res,next) => {
 
     res.sendFile(path.join(__dirname, "angular", "index.html"));
 });
