@@ -34,7 +34,11 @@ app.use((req,res,next) => {
 });
 
 app.use(bodyParser.json());
-app.use(express.static(__dirname +  '/dist/mean-course'));
+app.get((req,res,next) => {
+
+    res.sendFile(path.join(__dirname, "angular", "index.html"));
+});
+
 app.use("/images", express.static(path.join("backend/images")));
 app.use("/", express.static(path.join(__dirname, "angular")));
 
@@ -51,11 +55,6 @@ app.post("/post", postController.getPostInfo);
 app.put("/post/update/:id", checkAuth, extractFile, postController.updatePost);
 
 app.delete("/post/delete/:id", checkAuth, postController.deletePost);
-
-app.get("/", (req,res) => {
-
-    res.sendFile(path.join(__dirname, "angular", "index.html"));
-});
 
 app.get("/test", (req,res,next) => {
     res.status(200).send("Congratz");
