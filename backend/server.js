@@ -1,22 +1,26 @@
+const port = process.env.PORT || 3000;
+const mongoURI = process.env.MONGODB_URI || "mongodb://localhost:27017/node-angular";
+
 const express = require('express');
 const app = express();
+
 
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
 const path = require("path");
 
-const checkAuth = require("./backend/middleware/check-auth");
-const userController = require('./backend/controllers/user.js');
-const postController = require('./backend/controllers/post.js');
-const extractFile = require('./backend/middleware/file');
+const checkAuth = require("./middleware/check-auth");
+const userController = require('./controllers/user.js');
+const postController = require('./controllers/post.js');
+const extractFile = require('./middleware/file');
 
-app.listen( process.env.PORT, () => {
-    console.log("Connect to port : ",  process.env.PORT);
+app.listen( port, () => {
+    console.log("Connected to port : ",  port);
 });
 
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(mongoURI)
 .then(() => {
-    console.log("Server is now connected");
+    console.log("Mongo server is now connected");
 })
 .catch((err) => {
     console.log("Connection failed : ",err);
@@ -32,6 +36,7 @@ app.use((req,res,next) => {
 app.use(bodyParser.json());
 app.use(express.static(__dirname +  '/dist/mean-course'));
 app.use("/images", express.static(path.join("backend/images")));
+app.use("/", express.static(path.join(__dirname, "angular")));
 
 app.post("/login", userController.userLogin);
 
