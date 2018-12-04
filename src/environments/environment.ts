@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   environmentType : "staging",
-  domainUrl : "https://quiet-refuge-84852.herokuapp.com"
+  domainUrl : "https://angular-mean-course.herokuapp.com"
 };
 
 /*
