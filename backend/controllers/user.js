@@ -42,6 +42,8 @@ exports.userLogin = (req,res,next) => {
 }
 
 exports.userSignup =  (req,res,next) => {
+
+    req.body = JSON.parse(req.body);
     
     bcrypt.hash(req.body.password , 10).then(function(hashedPassword)  {
         
